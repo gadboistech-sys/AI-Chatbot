@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Companion</title>
+    <link rel="stylesheet" href="/css/app.css">
+    <script src="https://cdn.jsdelivr.net/npm/livekit-client/dist/livekit-client.umd.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <div class="avatar-icon">✦</div>
+            <div style="flex:1;">
+                <div class="agent-name" id="agent-name">—</div>
+                <div class="status">
+                    <span class="dot disconnected" id="status-dot"></span>
+                    <span id="status-text">Not connected</span>
+                </div>
+            </div>
+            <button onclick="signOut()" style="background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:0 12px;height:30px;font-size:12px;font-family:var(--font);cursor:pointer;">Sign out</button>
+        </header>
+
+        <div id="config-bar">
+            <select id="avatar-select"><option value="">Loading avatars…</option></select>
+            <select id="voice-select"><option value="">Loading voices…</option></select>
+            <label id="sandbox-label">
+                <input type="checkbox" id="sandbox-check" checked> Sandbox mode (free, 1 min)
+            </label>
+            <button id="connect-btn" disabled>Connect avatar</button>
+            <button id="disconnect-btn">Disconnect</button>
+            <span id="avatar-error"></span>
+        </div>
+
+        <div id="main">
+            <div id="video-panel">
+                <div id="video-placeholder">
+                    <div class="placeholder-ring">✦</div>
+                    <div>Connect an avatar to begin</div>
+                </div>
+                <video id="avatar-video" autoplay playsinline></video>
+                <div id="video-overlay"></div>
+            </div>
+
+            <div id="chat-panel">
+                <div id="persona-row">
+                    <div id="persona-tabs">
+                        <button class="persona-tab active" onclick="switchPersonaTab('structured')">Persona</button>
+                        <button class="persona-tab" onclick="switchPersonaTab('advanced')">Advanced</button>
+                    </div>
+                    <div id="persona-structured" class="active">
+                        <div class="pfield">
+                            <label>Core traits <span style="color:var(--muted);font-weight:400;text-transform:none">(comma-separated)</span></label>
+                            <input id="p-traits" type="text" placeholder="e.g. dry wit, intellectually curious, quietly warm">
+                        </div>
+                        <div class="pfield">
+                            <label>Verbal style <span style="color:var(--muted);font-weight:400;text-transform:none">(comma-separated)</span></label>
+                            <input id="p-verbal" type="text" placeholder="e.g. uses rhetorical questions, pauses before difficult answers">
+                        </div>
+                        <div class="pfield">
+                            <label>Expressiveness</label>
+                            <div class="slider-row">
+                                <span>Reserved</span>
+                                <input id="p-expressiveness" type="range" min="0" max="100" value="50">
+                                <span>Expressive</span>
+                            </div>
+                        </div>
+                        <div class="pfield">
+                            <label>Tone</label>
+                            <div class="slider-row">
+                                <span>Lighthearted</span>
+                                <input id="p-seriousness" type="range" min="0" max="100" value="40">
+                                <span>Earnest</span>
+                            </div>
+                        </div>
+                        <div class="pfield">
+                            <label>Backstory anchors <span style="color:var(--muted);font-weight:400;text-transform:none">(one per line)</span></label>
+                            <textarea id="p-backstory" rows="2" placeholder="e.g. grew up in a small coastal town&#10;lost someone close in their 20s"></textarea>
+                        </div>
+                        <div class="pfield">
+                            <label>How they show care</label>
+                            <input id="p-care" type="text" placeholder="e.g. remembers small details the other person mentioned">
+                        </div>
+                        <div class="pfield">
+                            <label>Under stress or tension</label>
+                            <input id="p-stress" type="text" placeholder="e.g. gets quieter and more precise">
+                        </div>
+                        <div class="pfield">
+                            <label>Additional notes</label>
+                            <textarea id="p-notes" rows="2" placeholder="Anything else that defines this persona…"></textarea>
+                        </div>
+                    </div>
+                    <div id="persona-advanced">
+                        <textarea id="persona-input" rows="6" placeholder="Compiled persona prompt will appear here after saving…"></textarea>
+                    </div>
+                    <div class="persona-actions">
+                        <button class="primary" onclick="savePersona()">Save persona</button>
+                        <button onclick="resetPersona()">Reset to default</button>
+                    </div>
+                </div>
+
+                <div id="messages">
+                    <div id="empty-state">Say something to your avatar</div>
+                </div>
+                <div id="input-area">
+                    <button id="mic-btn" class="btn" title="Hold to speak">🎙</button>
+                    <textarea id="user-input" placeholder="Type a message…" rows="1"></textarea>
+                    <button id="send-btn" class="btn">↑</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="saving-modal">
+        <div id="saving-modal-box">
+            <div class="spinner"></div>
+            <p>Saving conversation memory…</p>
+            <small>Please don't close this tab</small>
+        </div>
+    </div>
+
+    <!-- Scripts — order is load-order dependent -->
+    <script src="/js/api.js"></script>
+    <script src="/js/state.js"></script>
+    <script src="/js/memory.js"></script>
+    <script src="/js/persona.js"></script>
+    <script src="/js/ui.js"></script>
+    <script src="/js/avatar.js"></script>
+    <script src="/js/voice.js"></script>
+    <script src="/js/chat.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>
